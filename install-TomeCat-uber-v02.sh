@@ -246,7 +246,8 @@ validateUsernameAndPassword
 log INFO "======== Updating Ambari Configs ============="
 updateAmbariConfigs
 
-log INFO "======== Downloading and unzip WebWasb"
+log INFO "======== Downloading and unzip WebWasb and Hue ============="
+downloadAndUnzipWebWasb
 
 log INFO "======== Restarting Stale Services ============="
 restartStaleServices
