@@ -5,10 +5,10 @@ AMBARICONFIGS_SH=/var/lib/ambari-server/resources/scripts/configs.sh
 AMBARICONFIGS_PY=/var/lib/ambari-server/resources/scripts/configs.py
 PORT=8080
 
-WEBWASB_TARFILE=webwasb-tomcat.tar.gz
-WEBWASB_TARFILEURI=https://hdiconfigactions.blob.core.windows.net/linuxhueconfigactionv01/$WEBWASB_TARFILE
-WEBWASB_TMPFOLDER=/tmp/webwasb
-WEBWASB_INSTALLFOLDER=/usr/share/webwasb-tomcat
+WEBWASB_TARFILE=apache-tomcat-8.5.87.tar.gz
+WEBWASB_TARFILEURI=https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.87/bin/apache-tomcat-8.5.87.tar.gz
+WEBWASB_TMPFOLDER=/home/WxAdminSc/tomcat
+WEBWASB_INSTALLFOLDER=/usr/share/apache-tomcat-8.5.87
 
 LOG_PREFIX='Install_TomeCat_Script'
 
@@ -187,40 +187,10 @@ downloadAndUnzipWebWasb() {
     
     log INFO "Unzipping webwasb-tomcat"
     tar -zxvf $WEBWASB_TMPFOLDER/$WEBWASB_TARFILE -C /usr/share/
-    
-    execute_with_logs "rm -rf $WEBWASB_TMPFOLDER/"
 }
 
 setupWebWasbService() {
-    log INFO "Adding webwasb user"
-    execute_with_logs "useradd -r webwasb"
-
-    log INFO "Making webwasb a service and start it"
-    execute_with_logs 'sed -i "s|JAVAHOMEPLACEHOLDER|$JAVA_HOME|g" $WEBWASB_INSTALLFOLDER/upstart/webwasb.conf'
-    execute_with_logs "chown -R webwasb:webwasb $WEBWASB_INSTALLFOLDER"
-    execute_with_logs "cp -f $WEBWASB_INSTALLFOLDER/upstart/webwasb.conf /etc/init/"
-    log INFO "Creating the webwasb.service file"
-    cat >/etc/systemd/system/webwasb.service <<EOL
-[Unit]
-Description=webwasb service
-
-[Service]
-Type=simple
-User=webwasb
-Group=webwasb
-Restart=always
-RestartSec=5 
-Environment="JAVA_HOME=$JAVA_HOME"
-Environment="CATALINA_HOME=/usr/share/webwasb-tomcat"
-ExecStart=/usr/share/webwasb-tomcat/bin/catalina.sh run
-ExecStopPost=/bin/bash -c 'rm -rf $CATALINA_HOME/temp/*'
-
-[Install]
-WantedBy=multi-user.target
-EOL
-log INFO "Reloading systemd configuration and restarting webwasb.service"   
-execute_with_logs "systemctl daemon-reload"
-execute_with_logs "systemctl restart webwasb.service"
+    execute_with_logs "/usr/share/apache-tomcat-8.5.87/bin/startup.sh"
 }
 
 
