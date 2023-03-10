@@ -212,15 +212,15 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 echo JAVA_HOME=$JAVA_HOME
 
-checkHostNameAndSetClusterName
-validateUsernameAndPassword
+#checkHostNameAndSetClusterName
+#validateUsernameAndPassword
 log INFO "======== Updating Ambari Configs ============="
-updateAmbariConfigs
+#updateAmbariConfigs
 
 log INFO "======== Downloading and unzip WebWasb and Hue ============="
 downloadAndUnzipWebWasb
 
 log INFO "======== Restarting Stale Services ============="
-restartStaleServices
+#restartStaleServices
 
 setupWebWasbService
