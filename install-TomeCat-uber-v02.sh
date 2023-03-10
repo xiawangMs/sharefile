@@ -190,6 +190,7 @@ downloadAndUnzipWebWasb() {
 }
 
 setupWebWasbService() {
+    execute_with_logs "chown -R webwasb:webwasb $WEBWASB_INSTALLFOLDER"
     execute_with_logs "/usr/share/apache-tomcat-8.5.87/bin/startup.sh"
 }
 
